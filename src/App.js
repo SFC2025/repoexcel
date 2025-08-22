@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import FormHeader from "./components/FormHeader";
 import FormField from "./components/FormField";
 import FormPreview from "./components/FormPreview";
-import { formFields, initialFormData } from "./data/formConfig";
+import SectionCard from "./components/SectionCard";
+import { sections, initialFormData } from "./data/fenalceSchema";
 import { validateForm, isFormValid } from "./utils/validation";
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const allFields = sections.flatMap((s) => s.fields);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -22,7 +24,7 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newErrors = validateForm(formData, formFields);
+    const newErrors = validateForm(formData, allFields);
     setErrors(newErrors);
     setIsSubmitted(isFormValid(newErrors));
   };
@@ -34,9 +36,10 @@ const App = () => {
   };
 
   // Requeridos completos
-  const hasRequiredData = formFields
-    .filter((field) => field.required)
-    .every((field) => formData[field.name] && formData[field.name].trim() !== "");
+  const requiredNames = allFields.filter((f) => f.required).map((f) => f.name);
+  const hasRequiredData = requiredNames.every(
+    (name) => (formData[name] ?? "").toString().trim() !== ""
+  );
 
   // Validez final para habilitar export
   const isValid = isSubmitted && hasRequiredData;
@@ -45,7 +48,8 @@ const App = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <FormHeader
-          title="Formulario Profesional"
+          title="CARACTERIZACIÓN INTEGRAL DE 
+PRODUCTORES Y ORGANIZACIONES"
           subtitle="Complete sus datos para generar un reporte en Excel"
         />
 
@@ -59,30 +63,40 @@ const App = () => {
               transition={{ duration: 0.6 }}
             >
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {formFields.map((field, index) => (
-                    <motion.div
-                      key={field.name}
-                      className={field.type === "textarea" ? "md:col-span-2" : ""}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                <div className="space-y-8">
+                  {sections.map((section, sIdx) => (
+                    <SectionCard
+                      key={section.id}
+                      id={section.id}
+                      title={section.title}
+                      index={sIdx}
                     >
-                      <FormField
-                        {...field}
-                        value={formData[field.name]}
-                        onChange={handleInputChange}
-                      />
-                      {errors[field.name] && (
-                        <motion.p
-                          className="text-red-500 text-sm mt-1"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
-                          {errors[field.name]}
-                        </motion.p>
-                      )}
-                    </motion.div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {section.fields.map((field, i) => {
+                          const full =
+                            field.fullWidth || field.type === "divider";
+                          return (
+                            <div
+                              key={field.name || `div-${i}`}
+                              className={full ? "md:col-span-2" : ""}
+                            >
+                              <FormField
+                                {...field}
+                                value={
+                                  field.name ? formData[field.name] : undefined
+                                }
+                                onChange={handleInputChange}
+                              />
+                              {errors[field.name] && (
+                                <p className="text-red-500 text-sm mt-1">
+                                  {errors[field.name]}
+                                </p>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </SectionCard>
                   ))}
                 </div>
 
