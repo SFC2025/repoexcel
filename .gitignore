@@ -1,0 +1,50 @@
+# dependencias
+node_modules/
+
+# builds
+dist/
+build/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editor / SO
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.vscode/
+.idea/
+*.swp
+
+# Windows thumbnails / metadatos
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# tests
+coverage/
+
+# envs (no subir secretos)
+.env
+.env.*
+!.env.example
+
+# vercel
+.vercel/
+
+# (Opcional) Ignorar imágenes sueltas por defecto,
+# pero permitir assets del proyecto en rutas conocidas:
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
+!public/**
+!src/assets/**
