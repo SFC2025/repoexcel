@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/repoexcel/static/css/main.9e638764.css",
-    "main.js": "/repoexcel/static/js/main.e195a6f5.js",
+    "main.css": "/repoexcel/static/css/main.5c1e8c86.css",
+    "main.js": "/repoexcel/static/js/main.00fc8d53.js",
     "index.html": "/repoexcel/index.html",
-    "main.9e638764.css.map": "/repoexcel/static/css/main.9e638764.css.map",
-    "main.e195a6f5.js.map": "/repoexcel/static/js/main.e195a6f5.js.map"
+    "main.5c1e8c86.css.map": "/repoexcel/static/css/main.5c1e8c86.css.map",
+    "main.00fc8d53.js.map": "/repoexcel/static/js/main.00fc8d53.js.map"
   },
   "entrypoints": [
-    "static/css/main.9e638764.css",
-    "static/js/main.e195a6f5.js"
+    "static/css/main.5c1e8c86.css",
+    "static/js/main.00fc8d53.js"
   ]
 }
