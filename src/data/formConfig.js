@@ -1,0 +1,100 @@
+export const formFields = [
+  {
+    name: "nombre",
+    label: "Nombre Completo",
+    type: "text",
+    placeholder: "Ingrese su nombre completo",
+    required: true,
+  },
+  {
+    name: "email",
+    label: "Correo Electrónico",
+    type: "email",
+    placeholder: "ejemplo@correo.com",
+    required: true,
+  },
+  {
+    name: "telefono",
+    label: "Teléfono",
+    type: "tel",
+    placeholder: "+1 234 567 8900",
+    required: false,
+  },
+  {
+    name: "edad",
+    label: "Edad",
+    type: "number",
+    placeholder: "25",
+    min: 18,
+    max: 100,
+    required: true,
+  },
+  {
+    name: "ciudad",
+    label: "Ciudad",
+    type: "select",
+    options: [
+      "Madrid",
+      "Barcelona",
+      "Valencia",
+      "Sevilla",
+      "Bilbao",
+      "Málaga",
+      "Zaragoza",
+      "Murcia",
+      "Palma",
+      "Las Palmas",
+    ],
+    required: true,
+  },
+  {
+    name: "profesion",
+    label: "Profesión",
+    type: "text",
+    placeholder: "Desarrollador, Diseñador, etc.",
+    required: true,
+  },
+  {
+    name: "salario",
+    label: "Salario Anual (€)",
+    type: "number",
+    placeholder: "35000",
+    min: 0,
+    max: 200000,
+    step: 1000,
+    required: false,
+  },
+  {
+    name: "experiencia",
+    label: "Años de Experiencia",
+    type: "number",
+    placeholder: "5",
+    min: 0,
+    max: 50,
+    required: true,
+  },
+  {
+    name: "categoria",
+    label: "Categoría Profesional",
+    type: "select",
+    options: [
+      { value: "junior", label: "Junior (0-2 años)" },
+      { value: "mid", label: "Mid-Level (3-5 años)" },
+      { value: "senior", label: "Senior (6-10 años)" },
+      { value: "lead", label: "Lead/Manager (10+ años)" },
+    ],
+    required: true,
+  },
+  {
+    name: "comentarios",
+    label: "Comentarios Adicionales",
+    type: "textarea",
+    placeholder: "Información adicional que desee compartir...",
+    required: false,
+  },
+];
+
+export const initialFormData = formFields.reduce((acc, field) => {
+  acc[field.name] = "";
+  return acc;
+}, {});
