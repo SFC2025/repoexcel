@@ -1,6 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 
-export default function FormField(props) {
+function FormField(props) {
   const {
     type = "text",
     name,
@@ -14,7 +14,12 @@ export default function FormField(props) {
     max,
     step,
     rows = 4,
+    error,
   } = props;
+  const aria = {
+    "aria-invalid": !!error,
+    "aria-describedby": error ? `${name}-error` : undefined,
+  };
 
   // ------- SELECT -------
   if (type === "select") {
@@ -27,7 +32,9 @@ export default function FormField(props) {
           name={name}
           value={value || ""}
           onChange={onChange}
+          required={required}
           className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          {...aria}
         >
           <option value="">Seleccionar…</option>
           {options.map((opt) => (
@@ -50,7 +57,12 @@ export default function FormField(props) {
       onChange({ target: { name, value: next } });
     };
     return (
-      <fieldset className="block">
+      <fieldset
+        className="block"
+        role="group"
+        aria-invalid={!!error}
+        aria-describedby={error ? `${name}-error` : undefined}
+      >
         <legend className="block text-sm font-medium text-gray-700 mb-1">
           {label} {required && <span className="text-red-500">*</span>}
         </legend>
@@ -86,7 +98,12 @@ export default function FormField(props) {
       onChange({ target: { name, value: next } }); // compatible con tu handleInputChange
     };
     return (
-      <fieldset className="block">
+      <fieldset
+        className="block"
+        role="group"
+        aria-invalid={!!error}
+        aria-describedby={error ? `${name}-error` : undefined}
+      >
         <legend className="block text-sm font-medium text-gray-700 mb-1">
           {label} {required && <span className="text-red-500">*</span>}
         </legend>
@@ -131,7 +148,9 @@ export default function FormField(props) {
           onChange={onChange}
           placeholder={placeholder}
           rows={rows}
+          required={required}
           className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          {...aria}
         />
       </label>
     );
@@ -152,8 +171,11 @@ export default function FormField(props) {
         min={min}
         max={max}
         step={step}
+        required={required}
         className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        {...aria}
       />
     </label>
   );
 }
+export default memo(FormField);

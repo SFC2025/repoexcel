@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { motion } from "framer-motion";
 
-export default function SectionCard({ id, title, index = 0, children }) {
+function SectionCard({ id, title, index = 0, children }) {
   // 4 paletas que van rotando por sección
   const palettes = [
     { ring: "ring-blue-200/60", bg: "from-blue-50 to-cyan-50" },
@@ -15,8 +15,7 @@ export default function SectionCard({ id, title, index = 0, children }) {
     <motion.section
       id={id}
       aria-labelledby={`${id}-title`}
-      className={`bg-gradient-to-br ${p.bg} ring-1 ${p.ring} border border-white/60
-                rounded-2xl shadow-sm p-6 md:p-8 scroll-mt-28`}
+      className={`section-card bg-gradient-to-br ${p.bg} ring-1 ${p.ring} border-white/60 rounded-2xl p-6 md:p-8 scroll-mt-28`}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -24,7 +23,7 @@ export default function SectionCard({ id, title, index = 0, children }) {
     >
       <h2
         id={`${id}-title`}
-        className="text-lg md:text-xl font-semibold text-gray-800 flex items-center gap-3 mb-6"
+        className="section-title flex items-center gap-3 mb-6"
       >
         <span className="w-7 h-7 rounded-full bg-white/80 text-gray-700 text-sm font-bold shadow inline-flex items-center justify-center">
           {index + 1}
@@ -36,3 +35,4 @@ export default function SectionCard({ id, title, index = 0, children }) {
     </motion.section>
   );
 }
+export default memo(SectionCard);

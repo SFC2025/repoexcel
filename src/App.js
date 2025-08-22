@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import FormHeader from "./components/FormHeader";
 import FormField from "./components/FormField";
@@ -11,22 +11,53 @@ const App = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const allFields = useMemo(() => sections.flatMap((s) => s.fields), []);
+  const fieldToSectionId = useMemo(() => {
+    const map = {};
+    sections.forEach((sec) => {
+      sec.fields.forEach((f) => {
+        if (f.name) map[f.name] = sec.id;
+      });
+    });
+    return map;
+  }, []);
 
-  const allFields = sections.flatMap((s) => s.fields);
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleInputChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
 
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
+      if (errors[name]) {
+        setErrors((prev) => ({ ...prev, [name]: "" }));
+      }
+    },
+    [errors]
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = validateForm(formData, allFields);
     setErrors(newErrors);
     setIsSubmitted(isFormValid(newErrors));
+
+    // si hay errores, scrolleo a la 1ª sección y enfoco el 1º campo inválido
+    const names = Object.keys(newErrors);
+    if (names.length > 0) {
+      const firstName = names[0];
+      const secId = fieldToSectionId[firstName];
+
+      if (secId) {
+        document.getElementById(secId)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+
+        setTimeout(() => {
+          const el = document.querySelector(`[name="${firstName}"]`);
+          if (el) el.focus({ preventScroll: true });
+        }, 300);
+      }
+    }
   };
 
   const handleReset = () => {
@@ -86,9 +117,13 @@ PRODUCTORES Y ORGANIZACIONES"
                                   field.name ? formData[field.name] : undefined
                                 }
                                 onChange={handleInputChange}
+                                error={errors[field.name]}
                               />
                               {errors[field.name] && (
-                                <p className="text-red-500 text-sm mt-1">
+                                <p
+                                  id={`${field.name}-error`}
+                                  className="text-red-500 text-sm mt-1"
+                                >
                                   {errors[field.name]}
                                 </p>
                               )}
